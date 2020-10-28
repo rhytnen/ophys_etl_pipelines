@@ -6,7 +6,7 @@ LABEL description="This dockerfile provides a working environment for \
                    Allen Institute for Brain Science optical physiology data \
                    processing pipelines."
 
-ARG SUITE2P_TAG=0.7.5
+ARG SUITE2P_TAG=b635fcdddbe88185f465848e3bf10bcb3c18f58e
 ARG OPHYS_ETL_TAG=main
 ARG OPHYS_ETL_COMMIT_SHA="unknown build"
 
@@ -28,7 +28,8 @@ RUN apt-get -y update \
     && apt-get -y install \
         libgl1-mesa-glx \
     && rm -rf /var/lib/apt/* \
-    && git clone -b ${SUITE2P_TAG} https://github.com/MouseLand/suite2p ./suite2p \
+    && git clone https://github.com/MouseLand/suite2p ./suite2p \
+    && git -C ./suite2p checkout ${SUITE2P_TAG} \
     && conda env update --prefix ${SUITE2P_ENV} --file ./suite2p/environment.yml \
     && conda run --prefix ${SUITE2P_ENV} pip install --no-cache ./suite2p \
     && git clone -b ${OPHYS_ETL_TAG} https://github.com/AllenInstitute/ophys_etl_pipelines ./ophys_etl \
