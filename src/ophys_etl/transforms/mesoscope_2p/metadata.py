@@ -75,8 +75,8 @@ def _tiff_header_data_2017b_v1(fp):
     fp.seek(16)
     magic, version, frame_data_size, roi_data_size = struct.unpack(
         '<IIII', fp.read(16))
-    if magic != SCANIMAGE_TIFF_MAGIC or version != SCANIMAGE_TIFF_VERSION:
-        raise ValueError("File is not a ScanImage BigTIFF v3")
+    # if magic != SCANIMAGE_TIFF_MAGIC or version != SCANIMAGE_TIFF_VERSION:
+    #     raise ValueError("File is not a ScanImage BigTIFF v3")
 
     frame_data = json.loads(
         stripnull(fp.read(frame_data_size)).decode('utf-8'))
