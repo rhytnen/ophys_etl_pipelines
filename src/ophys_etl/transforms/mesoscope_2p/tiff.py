@@ -287,6 +287,7 @@ class MesoscopeTiff(object):
         return stride
 
     def nearest_volume(self, roi_index, z):
+        print('running nearest volume ',roi_index,z)
         return self._nearest(roi_index, z)
 
     def nearest_plane(self, roi_index, z):
@@ -295,7 +296,9 @@ class MesoscopeTiff(object):
     def _nearest(self, roi_index, z, list_attr="volume_views"):
         best_err = 10000
         view = None
+        print('in _nearest')
         for v in getattr(self, list_attr):
+            print('v.roi_index ',v.roi_index)
             if v.roi_index == roi_index:
                 err = np.abs(z - np.mean(v.zs))
                 if err < best_err:
@@ -357,8 +360,11 @@ class MesoscopeTiff(object):
             page_offset = 0
             # this logic is probably incorrect if there are 2+ volume scans
             # with identical zs, but needs testing to confirm
+            print('volume scans')
+            print(self.volume_scans)
             for zs in self.volume_scans:
                 scanned = [roi for roi in self.rois if roi.volume_scanned(zs)]
+                print('scanned ',zs,scanned)
                 if len(scanned) > 1:
                     iheight = sum([roi.height(zs[0]) for roi in scanned])
                     pheight = self._tiff.pages[page_offset].shape[0]
